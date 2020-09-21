@@ -10,17 +10,36 @@
             <nuxt-link v-else to="/login">Have an account?</nuxt-link>
           </p>
           <ul class="error-messages">
-            <li>That email is already taken</li>
+            <template v-for="(messages,field) in errors" >
+                <li :key="index" v-for="(message,index) in messages">{{field}} {{message}}</li>
+            </template>
           </ul>
-          <form>
+          <form @submit.prevent="onSubmit">
             <fieldset class="form-group" v-if="!isLogin">
-              <input class="form-control form-control-lg" type="text" placeholder="Your Name">
+              <input
+                v-model="user.username"
+                class="form-control form-control-lg"
+                type="text"
+                placeholder="Your Name"
+              >
             </fieldset>
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="text" placeholder="Email">
+              <input
+                v-model="user.email"
+                class="form-control form-control-lg"
+                type="email"
+                placeholder="Email"
+                required
+              >
             </fieldset>
             <fieldset class="form-group">
-              <input class="form-control form-control-lg" type="password" placeholder="Password">
+              <input
+                v-model="user.password"
+                class="form-control form-control-lg"
+                type="password"
+                placeholder="Password"
+                required
+              >
             </fieldset>
             <button class="btn btn-lg btn-primary pull-xs-right">{{isLogin?'Sign in':'Sign up'}}</button>
           </form>
@@ -31,11 +50,21 @@
 </template>
 
 <script>
+import { login ,register} from "@/api/user";
 export default {
   name: "",
   props: [""],
   data() {
-    return {};
+    return {
+      user: {
+        email: "",
+        password: "",
+        username:''
+      },
+      errors:{
+
+      }
+    };
   },
 
   components: {},
@@ -50,7 +79,19 @@ export default {
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    async onSubmit() {
+      console.log("提交");
+      try {
+        const { data } = this.isLogin
+        ? await login({ user: this.user })
+        : await register({ user: this.user });
+        this.$router.push("/");
+      } catch (error) {
+        this.errors = error.response.data.errors
+      }
+    },
+  },
 
   watch: {},
 };
