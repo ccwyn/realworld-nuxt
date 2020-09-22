@@ -51,6 +51,8 @@
 
 <script>
 import { login ,register} from "@/api/user";
+const Cookie = process.client ? require('js-cookie') : undefined
+
 export default {
   name: "",
   props: [""],
@@ -86,6 +88,10 @@ export default {
         const { data } = this.isLogin
         ? await login({ user: this.user })
         : await register({ user: this.user });
+        // 存储登录状态
+        this.$store.commit('setUser',data.user);
+        // 防止页面刷新数据丢失-数据持久化
+        Cookie.set('user',data.user)
         this.$router.push("/");
       } catch (error) {
         this.errors = error.response.data.errors
