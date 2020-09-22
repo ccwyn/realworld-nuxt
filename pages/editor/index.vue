@@ -35,6 +35,7 @@
   export default {
     name:'EditorIndex',
     props:[''],
+    middleware:'authenticated',
     data () {
       return {
 

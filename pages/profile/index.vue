@@ -81,6 +81,7 @@
 export default {
   name: "userProfile",
   props: [""],
+  middleware:'authenticated',
   data() {
     return {};
   },

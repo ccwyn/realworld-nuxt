@@ -37,6 +37,7 @@
 <script>
 export default {
   name: "settings",
+  middleware:'authenticated',
   props: [""],
   data() {
     return {};
