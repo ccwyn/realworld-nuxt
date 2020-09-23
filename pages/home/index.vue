@@ -67,7 +67,7 @@
           <div class="sidebar">
             <p>Popular Tags</p>
             <div class="tag-list">
-              <a v-for="item in tags" :key="item+1" href="" class="tag-pill tag-default">{{item}}</a>
+              <nuxt-link v-for="item in tags" :key="item+1" href="" class="tag-pill tag-default">{{item}}</nuxt-link>
             </div>
           </div>
         </div>
