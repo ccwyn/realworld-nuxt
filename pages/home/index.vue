@@ -63,7 +63,7 @@
                   :to="{name:'profile',params:{username:item.author.username}}"
                   class="author"
                 >{{item.author.username}}</nuxt-link>
-                <span class="date">{{item.createdAt}}</span>
+                <span class="date">{{item.createdAt|date('MMM DD, YYYY')}}</span>
               </div>
               <button class="btn btn-outline-primary btn-sm pull-xs-right">
                 <i class="ion-heart"></i>
