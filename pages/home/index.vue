@@ -42,19 +42,32 @@
               <span>Read more...</span>
             </nuxt-link>
           </div>
+          <nav>
+            <ul class="pagination">
+              <li
+                class="page-item"
+                :class="{active:item === page}"
+                v-for="item in totalPage"
+                :key="item"
+              >
+                <nuxt-link
+                  class="page-link"
+                  :to="{
+                  name:'home',
+                  query:{
+                    page:item
+                  }
+                }"
+                >{{item}}</nuxt-link>
+              </li>
+            </ul>
+          </nav>
         </div>
         <div class="col-md-3">
           <div class="sidebar">
             <p>Popular Tags</p>
             <div class="tag-list">
-              <a href="" class="tag-pill tag-default">programming</a>
-              <a href="" class="tag-pill tag-default">javascript</a>
-              <a href="" class="tag-pill tag-default">emberjs</a>
-              <a href="" class="tag-pill tag-default">angularjs</a>
-              <a href="" class="tag-pill tag-default">react</a>
-              <a href="" class="tag-pill tag-default">mean</a>
-              <a href="" class="tag-pill tag-default">node</a>
-              <a href="" class="tag-pill tag-default">rails</a>
+              <a v-for="item in tags" :key="item+1" href="" class="tag-pill tag-default">{{item}}</a>
             </div>
           </div>
         </div>
@@ -65,29 +78,44 @@
 
 <script>
 import { getArticles } from "@/api/article";
+import { getTags } from "@/api/tag";
+import { Promise } from "q";
 export default {
-  name: "",
+  name: "HomeIndex",
   props: [""],
-  async asyncData({query}) {
-    let page = Number.parseInt(query.page||1)
-    let limit = 2
-    const { data } = await getArticles({ 
-      limit: 2, 
-      offset: (page -1) * limit
-    });
-    console.log(data);
+  async asyncData({ query }) {
+    let page = Number.parseInt(query.page || 1);
+    let limit = 20;
+    const [articleRes, tagRes] = await Promise.all([
+      getArticles({
+        limit,
+        offset: (page - 1) * limit,
+      }),
+      getTags(),
+    ]);
+    const { articles, articlesCount } = articleRes.data;
+    const { tags } = tagRes.data;
     return {
-      articles: data.articles,
-      articleCount: data.articleCount,
+      articles,
+      articlesCount,
+      limit,
+      page,
+      tags,
     };
   },
+  watchQuery: ["page"], // 监听asyncData query 参数改变
   data() {
     return {};
   },
 
   components: {},
 
-  computed: {},
+  computed: {
+    totalPage() {
+      console.log(this.articlesCount, this.limit);
+      return Math.ceil(this.articlesCount / this.limit);
+    },
+  },
 
   beforeMount() {},
 
