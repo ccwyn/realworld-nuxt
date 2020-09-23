@@ -155,7 +155,7 @@ export default {
   name: "HomeIndex",
   props: [""],
   async asyncData({ query }) {
-    console.log(query);
+
     const page = Number.parseInt(query.page || 1);
     const limit = 20;
     const tab = query.tab || "global_feed";
@@ -193,7 +193,7 @@ export default {
   computed: {
     ...mapState(["user"]),
     totalPage() {
-      console.log(this.articlesCount, this.limit);
+
       return Math.ceil(this.articlesCount / this.limit);
     },
   },
@@ -204,7 +204,7 @@ export default {
 
   methods: {
     async onFavorite(article) {
-      console.log(article);
+
       article.favoriteDisabled = true;
       if (article.favorited) {
         await deleteFavorite(article.slug);

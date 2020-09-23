@@ -85,7 +85,7 @@ export default {
 
   methods: {
     async onSubmit() {
-      console.log("提交");
+
       try {
         const { data } = this.isLogin
         ? await login({ user: this.user })

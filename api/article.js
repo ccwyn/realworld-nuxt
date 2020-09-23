@@ -39,3 +39,10 @@ export const getArticle = (slug) => {
 
   });
 };
+export const getComments = (slug) => {
+  return request({
+    method: "GET",
+    url: `/api/articles/${slug}/comments`,
+
+  });
+};
