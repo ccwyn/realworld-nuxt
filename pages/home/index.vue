@@ -55,7 +55,8 @@
                   :to="{
                   name:'home',
                   query:{
-                    page:item
+                    page:item,
+                    tag:$route.query.tag
                   }
                 }"
                 >{{item}}</nuxt-link>
@@ -67,7 +68,12 @@
           <div class="sidebar">
             <p>Popular Tags</p>
             <div class="tag-list">
-              <nuxt-link v-for="item in tags" :key="item+1" href="" class="tag-pill tag-default">{{item}}</nuxt-link>
+              <nuxt-link v-for="item in tags" :key="item+1" :to="{
+                name:'home',
+                query:{
+                  tag:item
+                }
+              }" class="tag-pill tag-default">{{item}}</nuxt-link>
             </div>
           </div>
         </div>
@@ -90,6 +96,7 @@ export default {
       getArticles({
         limit,
         offset: (page - 1) * limit,
+        tag:query.tag
       }),
       getTags(),
     ]);
@@ -103,7 +110,7 @@ export default {
       tags,
     };
   },
-  watchQuery: ["page"], // 监听asyncData query 参数改变
+  watchQuery: ["page","tag"], // 监听asyncData query 参数改变
   data() {
     return {};
   },
