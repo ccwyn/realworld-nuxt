@@ -45,7 +45,18 @@ export default {
   },
 
   components: {},
-
+    head() {
+      return {
+        title: `${this.article.title} - realworld`,
+        meta: [
+          {
+            hid: 'description',
+            name: 'description',
+            content: this.article.description
+          }
+        ]
+      }
+    },
   computed: {},
 
   beforeMount() {},
