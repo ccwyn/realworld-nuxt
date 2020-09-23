@@ -41,7 +41,7 @@
                 <nuxt-link
                   exact
                   class="nav-link"
-                  :class="{active:tab=='global_feed'}"
+                  :class="{active:tab=='tag'}"
                   :to="{
                   name:'home',
                   query:{
@@ -90,7 +90,8 @@
                   name:'home',
                   query:{
                     page:item,
-                    tag:$route.query.tag
+                    tag:$route.query.tag,
+                    tab:tab
                   }
                 }"
                 >{{item}}</nuxt-link>
@@ -123,20 +124,23 @@
 </template>
 
 <script>
-import { getArticles } from "@/api/article";
+import { getArticles, getYourFeddArticles } from "@/api/article";
 import { getTags } from "@/api/tag";
-import { mapState } from "vux";
+import { mapState } from "vuex";
 
 export default {
   name: "HomeIndex",
   props: [""],
   async asyncData({ query }) {
-    let page = Number.parseInt(query.page || 1);
-    let limit = 20;
-    let tab = query.tab || "global_feed";
-    let tag = query.tag;
+    console.log(query);
+    const page = Number.parseInt(query.page || 1);
+    const limit = 20;
+    const tab = query.tab || "global_feed";
+    const tag = query.tag;
+    const loadArticles =
+      tab === "global_feed" ? getArticles : getYourFeddArticles;
     const [articleRes, tagRes] = await Promise.all([
-      getArticles({
+      loadArticles({
         limit,
         offset: (page - 1) * limit,
         tag,
@@ -155,7 +159,7 @@ export default {
       tab,
     };
   },
-  watchQuery: ["page", "tag","tab"], // 监听asyncData query 参数改变
+  watchQuery: ["page", "tag", "tab"], // 监听asyncData query 参数改变
   data() {
     return {};
   },
@@ -163,7 +167,7 @@ export default {
   components: {},
 
   computed: {
-    ...mapState(['user']),
+    ...mapState(["user"]),
     totalPage() {
       console.log(this.articlesCount, this.limit);
       return Math.ceil(this.articlesCount / this.limit);
