@@ -11,7 +11,10 @@
         <div class="col-md-9">
           <div class="feed-toggle">
             <ul class="nav nav-pills outline-active">
-              <li class="nav-item" v-if="user">
+              <li
+                class="nav-item"
+                v-if="user"
+              >
                 <nuxt-link
                   exact
                   class="nav-link"
@@ -37,7 +40,10 @@
                 }"
                 >Global Feed</nuxt-link>
               </li>
-              <li v-if="tag" class="nav-item">
+              <li
+                v-if="tag"
+                class="nav-item"
+              >
                 <nuxt-link
                   exact
                   class="nav-link"
@@ -53,7 +59,11 @@
               </li>
             </ul>
           </div>
-          <div v-for="item in articles" :key="item.slug" class="article-preview">
+          <div
+            v-for="item in articles"
+            :key="item.slug"
+            class="article-preview"
+          >
             <div class="article-meta">
               <nuxt-link :to="{name:'profile',params:{username:item.author.username}}">
                 <img :src="item.author.image">
@@ -65,12 +75,20 @@
                 >{{item.author.username}}</nuxt-link>
                 <span class="date">{{item.createdAt|date('MMM DD, YYYY')}}</span>
               </div>
-              <button class="btn btn-outline-primary btn-sm pull-xs-right">
+              <button
+                class="btn btn-outline-primary btn-sm pull-xs-right"
+                :class="{active:item.favorited}"
+                @click="onFavorite(item)"
+                :disabled="item.favoriteDisabled"
+              >
                 <i class="ion-heart"></i>
                 {{item.favoritesCount}}
               </button>
             </div>
-            <nuxt-link :to="{name:'article',params:{slug:item.slug}}" class="preview-link">
+            <nuxt-link
+              :to="{name:'article',params:{slug:item.slug}}"
+              class="preview-link"
+            >
               <h1>{{item.title}}</h1>
               <p>{{item.description}}</p>
               <span>Read more...</span>
@@ -124,7 +142,12 @@
 </template>
 
 <script>
-import { getArticles, getYourFeddArticles } from "@/api/article";
+import {
+  getArticles,
+  getYourFeddArticles,
+  addFavorite,
+  deleteFavorite,
+} from "@/api/article";
 import { getTags } from "@/api/tag";
 import { mapState } from "vuex";
 
@@ -149,6 +172,7 @@ export default {
     ]);
     const { articles, articlesCount } = articleRes.data;
     const { tags } = tagRes.data;
+    articles.forEach((item) => (item.favoriteDisabled = false));
     return {
       articles,
       articlesCount,
@@ -178,7 +202,22 @@ export default {
 
   mounted() {},
 
-  methods: {},
+  methods: {
+    async onFavorite(article) {
+      console.log(article);
+      article.favoriteDisabled = true;
+      if (article.favorited) {
+        await deleteFavorite(article.slug);
+        article.favorited = false;
+        article.favoritesCount += 1;
+      } else {
+        await addFavorite(article.slug);
+        article.favorited = true;
+        article.favoritesCount += 1;
+      }
+      article.favoriteDisabled = false;
+    },
+  },
 
   watch: {},
 };
