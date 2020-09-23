@@ -5,8 +5,7 @@
 module.exports = {
   router: {
     // base: "/abc",
-    linkActiveClass:'active',
-    
+    linkActiveClass: "active",
     extendRoutes(routes, resolve) {
       routes.splice(0); // 删除默认生成的路由表
       routes.push(
@@ -57,4 +56,7 @@ module.exports = {
       );
     },
   },
+  plugins:[
+    '~/plugins/request.js'
+  ]
 };

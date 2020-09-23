@@ -1,4 +1,4 @@
-import request from "@/utils/request";
+import {request} from "@/plugins/request";
 
 export const getArticles = (params) => {
   return request({
@@ -13,8 +13,8 @@ export const getYourFeddArticles = (params) => {
     method: "GET",
     url: "/api/articles/feed",
     params,
-    headers: {
-      Authorization: `Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTE1NzkzLCJ1c2VybmFtZSI6ImNjd3luIiwiZXhwIjoxNjA2MDExOTU3fQ.YHLQUlzMkl8BddaoE9zVXEMO_wUfe89dvbkyr9keudI`,
-    },
+    // headers: {
+    //   Authorization: `Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MTE1NzkzLCJ1c2VybmFtZSI6ImNjd3luIiwiZXhwIjoxNjA2MDExOTU3fQ.YHLQUlzMkl8BddaoE9zVXEMO_wUfe89dvbkyr9keudI`,
+    // },
   });
 };
