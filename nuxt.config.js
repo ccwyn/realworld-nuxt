@@ -59,5 +59,10 @@ module.exports = {
   plugins:[
     '~/plugins/request.js',
     '~/plugins/dayjs.js'
-  ]
+  ],
+  server:{
+    host:'0.0.0.0', // 指定使用一个 host，默认是 localhost，如果你希望服务器外部可访问,制定如下:'0.0.0.0' 代表本机的所有ip地址,网络中0.0.0.0的IP地址表示整个网络，即网络中的所有主机。
+    prot:3000, // 端口号
+
+  }
 };
